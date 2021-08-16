@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Panel />
+      <Panel name="Controller" />
     </div>
   );
 }
