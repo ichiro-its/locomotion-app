@@ -1,12 +1,13 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 
-export default function Panel(props) {
+export default function Panel({ name, children }) {
   return (
     <div className="panel">
       <div className="header">
-        <p>{props.name}</p>
+        <p>{name}</p>
       </div>
-      <div className="body">{props.children}</div>
+      <div className="body">{children}</div>
     </div>
   );
 }
