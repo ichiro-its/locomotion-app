@@ -18,13 +18,13 @@ header {
 
   nav {
     display: block;
-    padding: 1.4em 2em;
+    padding: 1.4rem 2rem;
     display: flex;
     align-items: center;
 
     h1 {
-      font-size: 2em;
-      padding: 0 1em;
+      font-size: 2rem;
+      padding: 0 1rem;
     }
 
     img {
@@ -35,7 +35,7 @@ header {
 
 .panel {
   width: 500px;
-  margin: 1em;
+  margin: 1rem;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid rgb(197, 197, 197);
@@ -43,13 +43,13 @@ header {
 
   .header {
     width: 100%;
-    padding: 0.8em;
+    padding: 0.8rem;
     background: $gray;
     color: white;
     text-align: center;
 
     p {
-      font-size: 1.2em;
+      font-size: 1.2rem;
     }
   }
 
@@ -62,14 +62,14 @@ header {
   }
 }
 
-.numberField {
+.number-field {
   display: flex;
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.09);
   border-radius: 10px;
   overflow: hidden;
 
   button {
-    padding: 0.5em 1em;
+    padding: 0.5rem 1rem;
     border: none;
     background: $light-gray;
     border-radius: none;
@@ -99,8 +99,8 @@ header {
     border: none;
     text-align: center;
     outline: none;
-    padding: 0.4em 1em;
-    font-size: 1.1em;
+    padding: 0.4rem 1rem;
+    font-size: 1.1rem;
 
     &[type="number"] {
       -moz-appearance: textfield;
