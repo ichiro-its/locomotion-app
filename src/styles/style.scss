@@ -135,3 +135,18 @@ header {
     display: none;
   }
 }
+
+.category {
+  padding: 1rem 0;
+  width: 100%;
+
+  .category-body {
+    width: 90%;
+    margin: 0 auto;
+
+    .header {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+  }
+}
