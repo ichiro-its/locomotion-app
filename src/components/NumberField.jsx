@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 
-export default function NumberField() {
-  const [value, setValue] = useState(0);
+export default function NumberField({ initialValue }) {
+  const [value, setValue] = useState(initialValue);
 
   const addValue = (val) => {
     setValue(value + val);
@@ -16,16 +17,10 @@ export default function NumberField() {
   };
 
   return (
-    <div className="numberField">
+    <div className="number-field">
       <button onClick={() => subtractValue(10)}>-10</button>
       <button onClick={() => subtractValue(1)}>-1</button>
-      <input
-        type="number"
-        name=""
-        id=""
-        value={value}
-        onChange={handleValueChange}
-      />
+      <input type="number" value={value} onChange={handleValueChange} />
       <button onClick={() => addValue(1)}>+1</button>
       <button onClick={() => addValue(10)}>+10</button>
     </div>
