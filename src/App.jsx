@@ -1,70 +1,71 @@
-import React from "react";
-import "./styles/style.scss";
-import Header from "./components/Header";
-import Panel from "./components/Panel";
-import Category from "./components/Category";
-import Collapsible from "react-collapsible";
-
-const locomotion = {
-  RightKick: {
-    target_pan: -15.8,
-    target_tilt: -5,
-  },
-  Position: {
-    max_a: 5,
-    min_ly: 10,
-    max_ry: -20,
-    min_x: -10,
-    max_x: 10,
-    min_ry: -10,
-    max_ly: 20,
-  },
-  LeftKick: {
-    target_tilt: -5,
-    target_pan: 11,
-  },
-  Move: {
-    min_x: 30,
-    max_y: 0,
-    max_x: 30,
-    max_a: 10,
-  },
-  Follow: {
-    min_tilt_: -30,
-    max_x: 30,
-    max_a: 10,
-  },
-  Pivot: {
-    target_tilt: -5,
-    max_x: 10,
-    max_ry: -20,
-    max_ly: 20,
-    min_x: -10,
-    max_a: 15,
-  },
-  Dribble: {
-    max_x: 30,
-    max_a: 15,
-    min_ry: -10,
-    max_ly: 20,
-    max_ry: -20,
-    min_ly: 10,
-    min_x: -10,
-  },
-};
+import React, { useState } from 'react';
+import Header from './components/Header';
+import LocomotionConfig from './components/LocomotionConfig';
+import LocomotionContext from './context/LocomotionContext';
 
 function App() {
+  const [locomotion, setLocomotion] = useState({
+    RightKick: {
+      target_pan: 0,
+      target_tilt: 0,
+    },
+    Position: {
+      max_a: 0,
+      min_ly: 0,
+      max_ry: 0,
+      min_x: 0,
+      max_x: 0,
+      min_ry: 0,
+      max_ly: 0,
+    },
+    LeftKick: {
+      target_tilt: 0,
+      target_pan: 0,
+    },
+    Move: {
+      min_x: 0,
+      max_y: 0,
+      max_x: 0,
+      max_a: 0,
+    },
+    Follow: {
+      min_tilt_: 0,
+      max_x: 0,
+      max_a: 0,
+    },
+    Pivot: {
+      target_tilt: 0,
+      max_x: 0,
+      max_ry: 0,
+      max_ly: 0,
+      min_x: 0,
+      max_a: 0,
+    },
+    Dribble: {
+      max_x: 0,
+      max_a: 0,
+      min_ry: 0,
+      max_ly: 0,
+      max_ry: 0,
+      min_ly: 0,
+      min_x: 0,
+    },
+  });
+
+  const setLocomotionValue = (name, key, value) => {
+    setLocomotion((prevState) => ({ ...prevState, [name]: { ...prevState[name], [key]: value } }));
+  };
+
   return (
-    <div className="App">
+    <LocomotionContext.Provider value={{
+      locomotion,
+      setLocomotion,
+      setLocomotionValue,
+    }}
+    >
       <Header />
-      <Panel name="Controller">
-        {Object.keys(locomotion).map((item, i) => (
-          <Collapsible trigger={item} transitionTime={200} key={i}>
-            <Category name={item} fields={locomotion[item]} />
-          </Collapsible>
-        ))}
-      </Panel>
-    </div>
+      <LocomotionConfig />
+    </LocomotionContext.Provider>
   );
 }
 
