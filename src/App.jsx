@@ -1,70 +1,89 @@
-import React from "react";
-import "./styles/style.scss";
-import Header from "./components/Header";
-import Panel from "./components/Panel";
-import Category from "./components/Category";
-import Collapsible from "react-collapsible";
+import React, { useState } from 'react';
+import {
+  BridgeProvider, BridgeConnection, LoggerProvider, NodeProvider, SessionProvider, ClientProvider,
+} from 'kumo-app';
+import Header from './components/Header';
 
-const locomotion = {
-  RightKick: {
-    target_pan: -15.8,
-    target_tilt: -5,
-  },
-  Position: {
-    max_a: 5,
-    min_ly: 10,
-    max_ry: -20,
-    min_x: -10,
-    max_x: 10,
-    min_ry: -10,
-    max_ly: 20,
-  },
-  LeftKick: {
-    target_tilt: -5,
-    target_pan: 11,
-  },
-  Move: {
-    min_x: 30,
-    max_y: 0,
-    max_x: 30,
-    max_a: 10,
-  },
-  Follow: {
-    min_tilt_: -30,
-    max_x: 30,
-    max_a: 10,
-  },
-  Pivot: {
-    target_tilt: -5,
-    max_x: 10,
-    max_ry: -20,
-    max_ly: 20,
-    min_x: -10,
-    max_a: 15,
-  },
-  Dribble: {
-    max_x: 30,
-    max_a: 15,
-    min_ry: -10,
-    max_ly: 20,
-    max_ry: -20,
-    min_ly: 10,
-    min_x: -10,
-  },
-};
+import LocomotionContext from './context/LocomotionContext';
+import LocomotionSettings from './LocomotionSettings';
 
 function App() {
+  const [locomotion, setLocomotion] = useState({
+    right_kick: {
+      target_pan: 0,
+      target_tilt: 0,
+    },
+    position: {
+      max_a: 0,
+      min_ly: 0,
+      max_ry: 0,
+      min_x: 0,
+      max_x: 0,
+      min_ry: 0,
+      max_ly: 0,
+    },
+    left_kick: {
+      target_tilt: 0,
+      target_pan: 0,
+    },
+    move: {
+      min_x: 0,
+      max_y: 0,
+      max_x: 0,
+      max_a: 0,
+    },
+    follow: {
+      min_tilt_: 0,
+      max_x: 0,
+      max_a: 0,
+    },
+    pivot: {
+      target_tilt: 0,
+      max_x: 0,
+      max_ry: 0,
+      max_ly: 0,
+      min_x: 0,
+      max_a: 0,
+    },
+    dribble: {
+      max_x: 0,
+      max_a: 0,
+      min_ry: 0,
+      max_ly: 0,
+      max_ry: 0,
+      min_ly: 0,
+      min_x: 0,
+    },
+  });
+
+  const setLocomotionValue = (name, key, value) => {
+    setLocomotion((prevState) => ({ ...prevState, [name]: { ...prevState[name], [key]: value } }));
+  };
+
   return (
-    <div className="App">
-      <Header />
-      <Panel name="Controller">
-        {Object.keys(locomotion).map((item, i) => (
-          <Collapsible trigger={item} transitionTime={200} key={i}>
-            <Category name={item} fields={locomotion[item]} />
-          </Collapsible>
-        ))}
-      </Panel>
-    </div>
+    <LocomotionContext.Provider value={{
+      locomotion,
+      setLocomotion,
+      setLocomotionValue,
+    }}
+    >
+      <LoggerProvider>
+        <BridgeProvider>
+          <BridgeConnection />
+          <SessionProvider>
+            <NodeProvider nodeName="suiryoku_app">
+              <ClientProvider
+                serviceType="suiryoku_interfaces/srv/GetConfig"
+                serviceName="/suiryoku/config/get_config"
+              >
+                <Header />
+                <LocomotionSettings />
+              </ClientProvider>
+            </NodeProvider>
+          </SessionProvider>
+        </BridgeProvider>
+      </LoggerProvider>
+    </LocomotionContext.Provider>
   );
 }
 
