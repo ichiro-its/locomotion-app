@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useContext, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useHandleProcess, useLogger, usePublisher } from 'kumo-app';
 import NumberField from './NumberField';
+
 import LocomotionContext from '../context/LocomotionContext';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,87 +19,107 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function LocomotionConfig() {
   const { locomotion } = useContext(LocomotionContext);
+
+  const configPublisher = usePublisher();
+  const logger = useLogger();
+
+  const [publishingConfig, handlePublishConfig] = useHandleProcess(() => {
+    const json = JSON.stringify(locomotion);
+    return configPublisher
+      .publish({
+        json,
+      })
+      .then(() => {
+        logger.success('Successfully published locomotion config.');
+      })
+      .catch((err) => {
+        logger.error(`Failed to publish locomotion config! ${err.message}.`);
+      });
+  }, 500);
+
+  useEffect(() => {
+    handlePublishConfig();
+  }, [locomotion]);
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={1}>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Position
-            </Typography>
-            {Object.keys(locomotion.Position).map((key) => (
-              <NumberField name="Position" keys={key} value={locomotion.Position[key]} />
-            ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Pivot
-            </Typography>
-            {Object.keys(locomotion.Pivot)
-              .map((key) => (
-                <NumberField name="Pivot" keys={key} value={locomotion.Pivot[key]} />
-              ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Dribble
-            </Typography>
-            {Object.keys(locomotion.Dribble)
-              .map((key) => (
-                <NumberField name="Dribble" keys={key} value={locomotion.Dribble[key]} />
-              ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Follow
-            </Typography>
-            {Object.keys(locomotion.Follow)
-              .map((key) => (
-                <NumberField name="Follow" keys={key} value={locomotion.Follow[key]} />
-              ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Left Kick
-            </Typography>
-            {Object.keys(locomotion.LeftKick)
-              .map((key) => (
-                <NumberField name="LeftKick" keys={key} value={locomotion.LeftKick[key]} />
-              ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Right Kick
-            </Typography>
-            {Object.keys(locomotion.RightKick)
-              .map((key) => (
-                <NumberField name="RightKick" keys={key} value={locomotion.RightKick[key]} />
-              ))}
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Item>
-            <Typography variant="h6" component="div" sx={{ padding: 1 }}>
-              Move
-            </Typography>
-            {Object.keys(locomotion.Move)
-              .map((key) => (
-                <NumberField name="Move" keys={key} value={locomotion.Move[key]} />
-              ))}
-          </Item>
-        </Grid>
+    <Grid container spacing={1}>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Position
+          </Typography>
+          {Object.keys(locomotion.position).map((key) => (
+            <NumberField name="position" keys={key} value={locomotion.position[key]} />
+          ))}
+        </Item>
       </Grid>
-    </Box>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Dribble
+          </Typography>
+          {Object.keys(locomotion.dribble)
+            .map((key) => (
+              <NumberField name="dribble" keys={key} value={locomotion.dribble[key]} />
+            ))}
+        </Item>
+      </Grid>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Pivot
+          </Typography>
+          {Object.keys(locomotion.pivot)
+            .map((key) => (
+              <NumberField name="pivot" keys={key} value={locomotion.pivot[key]} />
+            ))}
+        </Item>
+      </Grid>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Move
+          </Typography>
+          {Object.keys(locomotion.move)
+            .map((key) => (
+              <NumberField name="move" keys={key} value={locomotion.move[key]} />
+            ))}
+        </Item>
+      </Grid>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Follow
+          </Typography>
+          {Object.keys(locomotion.follow)
+            .map((key) => (
+              <NumberField name="follow" keys={key} value={locomotion.follow[key]} />
+            ))}
+        </Item>
+      </Grid>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Left Kick
+          </Typography>
+          {Object.keys(locomotion.left_kick)
+            .map((key) => (
+              <NumberField name="left_kick" keys={key} value={locomotion.left_kick[key]} />
+            ))}
+        </Item>
+      </Grid>
+      <Grid md={3}>
+        <Item>
+          <Typography variant="h6" component="div" sx={{ padding: 1 }}>
+            Right Kick
+          </Typography>
+          {Object.keys(locomotion.right_kick)
+            .map((key) => (
+              <NumberField name="right_kick" keys={key} value={locomotion.right_kick[key]} />
+            ))}
+        </Item>
+      </Grid>
+    </Grid>
   );
 }
 
